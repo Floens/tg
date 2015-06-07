@@ -1729,7 +1729,7 @@ void fail_interface (struct tgl_state *TLS, struct in_ev *ev, int error_code, co
     json_t *res = json_object ();
     assert (json_object_set (res, "result", json_string ("FAIL")) >= 0);
     assert (json_object_set (res, "error_code", json_integer (error_code)) >= 0);
-    assert (json_object_set (res, "error", json_string (error)) >= 0);
+    json_object_set (res, "error", json_string (error));
     char *s = json_dumps (res, 0);
     mprintf (ev, "%s\n", s);
     json_decref (res);
@@ -2795,7 +2795,7 @@ void interpreter_ex (char *line, void *ex) {
         break;
       } else {
         args[args_num].flags = 1;
-        args[args_num ++].str = strndup (cur_token, cur_token_len);
+        args[args_num ++].str = strdup (cur_token/*, cur_token_len*/);
         int z;
         for (z = 0; z < count; z ++) {
           fun (command, args_num, args, ex);
@@ -2916,7 +2916,7 @@ void interpreter_ex (char *line, void *ex) {
         break;
       } else {
         args[args_num].flags = 1;
-        args[args_num ++].str = strndup (cur_token, cur_token_len);
+        args[args_num ++].str = strdup (cur_token/*, cur_token_len*/);
         flags ++;
         continue;
       }
